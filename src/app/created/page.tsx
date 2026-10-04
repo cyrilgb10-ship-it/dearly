@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
-export default function CreatedPage() {
+function CreatedContent() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
 
@@ -25,24 +25,18 @@ export default function CreatedPage() {
       await navigator.clipboard.writeText(messageUrl);
     } catch {
       const textarea = document.createElement("textarea");
-
       textarea.value = messageUrl;
       textarea.style.position = "fixed";
       textarea.style.left = "-9999px";
-
       document.body.appendChild(textarea);
       textarea.focus();
       textarea.select();
-
       document.execCommand("copy");
       textarea.remove();
     }
 
     setCopied(true);
-
-    setTimeout(() => {
-      setCopied(false);
-    }, 2500);
+    setTimeout(() => setCopied(false), 2500);
   };
 
   const shareWhatsApp = () => {
@@ -230,5 +224,21 @@ export default function CreatedPage() {
         }
       `}</style>
     </main>
+  );
+}
+
+export default function CreatedPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="flex min-h-screen items-center justify-center bg-[#faf9f7] text-[#171717]">
+          <div className="text-sm text-black/40">
+            Chargement...
+          </div>
+        </main>
+      }
+    >
+      <CreatedContent />
+    </Suspense>
   );
 }
