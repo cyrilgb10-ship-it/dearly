@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Message {
+  id          String   @id @default(cuid())
+  recipient   String
+  sender      String
+  content     String   @db.VarChar(500)
+  type        String
+  theme       String
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
